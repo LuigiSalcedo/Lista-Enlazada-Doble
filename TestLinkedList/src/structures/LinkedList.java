@@ -6,23 +6,24 @@ package structures;
  * @param <T>
  */
 
-/*
- *  Add. -> Agregar elementos.
- *  Remove. -> Elimiar elementos.
- *  Size. -> Obtener tamaño.
- *  Get. -> Obtener un elemento.
- */
 public class LinkedList<T> 
 {
+    // Atributos
     private int size;
     private LinkedListElement<T> first;
     private LinkedListElement<T> last;
     
+    // Constuctores
     public LinkedList()
     {
         size = 0;
     }
     
+    /*
+     *  Método: add(T element).
+     *
+     *  Agrega un elemento a la lista.
+     */
     public void add(T element)
     {
         if(size == 0) 
@@ -44,19 +45,33 @@ public class LinkedList<T>
         size++;
     }
     
+    /*
+     *  Método: get(int index).
+     *  
+     *  Obtener un elemento de la lista en base a un indice.
+     */ 
     public T get(int index)
     {
+        Controller.verifyIndexError((LinkedList<Object>) this, index);
+        
         LinkedListElement<T> piv = searchElement(index);
         
         return piv.getValue();
     }
     
+    /*
+     *  Método: remove(int index).
+     *
+     *  Elimina un elemento de la lista en base a un indice.
+     */
     public void remove(int index)
     {
+        Controller.verifyIndexError((LinkedList<Object>) this, index);
+        
         LinkedListElement<T> piv = searchElement(index);
         
-        piv.getPrevious().setNext(piv.getNext());
-        piv.getNext().setPrevious(piv.getPrevious());
+        if(piv != first) piv.getPrevious().setNext(piv.getNext());
+        if(piv != last) piv.getNext().setPrevious(piv.getPrevious());
         
         if(piv == last)
         {
@@ -71,11 +86,65 @@ public class LinkedList<T>
         size--;
     }
     
+    /*
+     *  Método: set(T element, int index).
+     *  
+     *  Agrega un elemento en una posición deseada de la lista.
+     */
+    public void set(T element, int index)
+    {    
+        LinkedListElement<T> piv = searchElement(index);
+        
+        if(piv == first)
+        {
+            addFirst(element);
+            return;
+        }
+        
+        if(index == size)
+        {
+            add(element);
+            return;
+        }
+        
+        LinkedListElement<T> newElement = new LinkedListElement(element);
+        
+        newElement.setPrevious(piv.getPrevious());
+        newElement.setNext(piv);
+        piv.getPrevious().setNext(newElement);
+        piv.setPrevious(newElement);
+        
+        size++;
+    }
+    
+    /*
+     *  Método: size().
+     *
+     *  Retorna el tamaño actual de la lista.
+     */
     public int size()
     {
         return size;
     }
     
+    /*
+     *  Método: isEmpty().
+     *  
+     *  Retorna true en caso de que la lista esté vacia, de lo contrario 
+     *  retonará false.
+     */
+    public boolean isEmpty()
+    {
+        return size == 0;
+    }
+    
+    /*
+     *  Método: searchElement(int index).
+     *
+     *  Busca un elemento del tipo LinkedListElement 
+     *  (Objeto contenedor de los valores de la lista.)
+     *  y lo retorna.
+     */
     private LinkedListElement<T> searchElement(int index)
     {
         LinkedListElement<T> piv = first;
@@ -87,6 +156,11 @@ public class LinkedList<T>
         return piv;
     }
     
+    /*
+     *  Método: addFirst(T element)
+     *
+     *  Agrega un elemento al inicio de la lista.
+     */
     protected void addFirst(T element)
     {
         LinkedListElement<T> newFirst = new LinkedListElement(element);
@@ -100,6 +174,9 @@ public class LinkedList<T>
     @Override
     public String toString()
     {
+        
+        if(size == 0) return "empty";
+        
         LinkedListElement<T> piv = first;
        
         StringBuilder sb = new StringBuilder();

@@ -13,8 +13,8 @@ public class TestLinkedList
         LinkedList<Integer> list = new LinkedList();
         
         list.add(1);
-        list.add(3);
         list.add(2);
+        list.add(3);
         
         System.out.println(list);
         
@@ -23,8 +23,28 @@ public class TestLinkedList
         
         System.out.println("Size: " + list.size());
         
-        list.remove(1);
+        list.remove(0);
         
         System.out.println(list);
+        
+        list.set(1, 1);
+        
+        System.out.println(list);
+        
+        while(!list.isEmpty())
+        {
+            list.remove(0);
+        }
+        
+        System.out.println(list);
+        
+        try
+        {
+            list.get(0);
+        }
+        catch(ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("Error catched! All Rigth.");
+        }
     }
 }
